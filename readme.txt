@@ -61,20 +61,36 @@ $aspect2->apply();
 
 Further we need to specify the points of our concern using before, after and event static method of \Lib\Aop\Advice:
 
-class Sample {
-	function Sample() {
-		\Lib\Aop\Advice::before();
-		print 'Class initilization<br />';
-		\Lib\Aop\Advice::after();
-		return $this;
-	}
-	function Sample2() {
-		\Lib\Aop\Advice::before();
-		print 'Business logic of Sample2<br />';
-		\Lib\Aop\Advice::after($this);
-		return $this;
-	}
+class Sample
+{
+    public function sample()
+	{
+        \Lib\Aop\Advice::before();
+        print 'Class initilization<br />';
+        \Lib\Aop\Advice::after();
+        return $this;
+    }
+    public function sample2()
+	{
+        \Lib\Aop\Advice::before();
+        print 'Business logic of Sample2<br />';
+        \Lib\Aop\Advice::after();
+        return $this;
+    }
 }
+Mark that event triggers \Lib\Aop\Advice::* may have any number of arguments. Specified with pointcut handler then receive all these arguments preceding by mandatory \Lib\Aop\Dto\Trace object.
+
+$pc->before(function($trace, $arg1, $arg2)
+{
+     echo "Entry point of ", $trace->class, "::",
+        $trace->function, " with passed arguments ", $arg1, ", ", $arg2, PHP_EOL;
+});
+//...
+function sample() {
+	\Lib\Aop\Advice::before($arg1, $arg2);
+}
+
+
 
 Now during the run of these marked methods PHP fires corresponding events. It checks if the caller function matches pointcuts of any of enabled aspects and if it' so invokes handlers respectively.
 

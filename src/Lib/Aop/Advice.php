@@ -28,17 +28,18 @@ class Advice
         return new Dto\Trace($backtrace[2]);
     }
 
-    static private function _invokeCrosscuttingConcerns($point, 
+    static private function _invokeCrosscuttingConcerns($point,
         Dto\Trace $trace, array $args, $event = null)
     {
         // Make the first argument Dto\Trace
-        array_unshift($args, $trace);        
+        array_unshift($args, $trace);
         if ($enabled = Pointcut::getEnabled()) {
             foreach ($enabled as $pointcut) {
                 $caller = $pointcut["callers"];
                 if (($caller["class"] === $trace->class ||
                     $caller["class"] === "*") &&
-                    $caller["method"] === $trace->function) {
+                    ($caller["method"] === $trace->function ||
+                     $caller["method"] === "*")) {
                         array_walk($pointcut[$point], function($fn, $ev) use ($args, $event)
                         {
                             if (!$event) {
@@ -48,7 +49,7 @@ class Advice
                             }
                         });
                 }
-                
+
             }
         }
     }
