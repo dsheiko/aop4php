@@ -45,11 +45,11 @@ In the same way we can define an additional aspect, for example:
 
 $aspect2 = new \Lib\Aop\Aspect();
 $pc2 = $aspect2->pointcut("call *::Sample2");
-$pc2->_before(function()
+$pc2->before(function()
 {
 print 'Aspect2 preprocessor<br />';
 });
-$pc2->_after(function()
+$pc2->after(function()
 {
 print 'Aspect1 postprocessor<br />';
 });
