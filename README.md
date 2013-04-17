@@ -97,3 +97,5 @@ $Monitoring = new \Lib\Aop\Aspect();
 $pc3 = $Monitoring->pointcut("call *::*");
 ```
 Now we can attach before and after event handlers which will store timestamp on entry point and on exit point of very function affected. Having that log it's not a big deal to make a report on functions performance.
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/4d756c05ab9daf0e2f19b3efbbaa56b6 "githalytics.com")](http://githalytics.com/dsheiko/aop4php)
