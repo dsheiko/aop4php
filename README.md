@@ -18,15 +18,15 @@ Thus, the following basic AOP declarations may be singled out:
 Still too complicated? Well, I think everything will become clear once we introduce some practical examples. Let us begin with the simplest of them. I wrote this small library with a view to demonstrate both the advantages and availability of AOSD.
 
 It is possible to define a certain aspect for crosscutting concerns (let's say, for keeping transaction log), through initiating the Aspect class:
-```
+```php
 $aspect1 = new \Lib\Aop\Aspect();
 ```
 Then we set up a Pointcut and specify the methods it affects:
-```
+```php
 $pc1 = $aspect1->pointcut("call Sample::Sample  or call Sample::Sample2");
 ```
 The only thing remaining is to specify the program code for entry and exit points for the methods of the current pointcut:
-```
+```php
 $pc1->before(function()
 {
     print 'Aspect1 preprocessor<br />';
@@ -37,7 +37,7 @@ $pc1->after(function()
 });
 ```
 In the same way we can define an additional aspect, for example:
-```
+```php
 $aspect2 = new \Lib\Aop\Aspect();
 $pc2 = $aspect2->pointcut("call *::Sample2");
 $pc2->before(function()
@@ -50,12 +50,12 @@ $pc2->after(function()
 });
 ```
 In order to enable one or several aspects just use the apply method
-```
+```php
 $aspect1->apply();
 $aspect2->apply();
 ```
 Further we need to specify the points of our concern using before, after and event static method of \Lib\Aop\Advice:
-```
+```php
 class Sample
 {
     public function sample()
@@ -77,7 +77,7 @@ class Sample
 
 
 Mark that event triggers \Lib\Aop\Advice::* may have any number of arguments. Specified with pointcut handler then receive all these arguments preceding by mandatory \Lib\Aop\Dto\Trace object.
-```
+```php
 $pc->before(function($trace, $arg1, $arg2)
 {
      echo "Entry point of ", $trace->class, "::",
@@ -92,7 +92,7 @@ function sample() {
 Now during the run of these marked methods PHP fires corresponding events. It checks if the caller function matches pointcuts of any of enabled aspects and if it' so invokes handlers respectively.
 
 An example of  practical use? Suppose, we have wrapped our code with advices (\Lib\Aop\Advice methods) . Then one day a need arises to obtain a detailed report on the distribution of workload among the functions of our project. We set up an aspect and define its Pointcut, which includes all functions within the project:
-```
+```php
 $Monitoring = new \Lib\Aop\Aspect();
 $pc3 = $Monitoring->pointcut("call *::*");
 ```
